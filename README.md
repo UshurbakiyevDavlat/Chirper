@@ -7,9 +7,9 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-# Chirper - Microblogging Platform
+# Chirper - Micro-blogging Platform
 ## Overview
-Chirper is a microblogging platform built with Laravel. It allows users to share short messages called "chirps" with each other, follow other users, and explore popular chirps.
+Chirper is a micro-blogging platform built with Laravel. It allows users to share short messages called "chirps" with each other, follow other users, and explore popular chirps.
 
 ## Prerequisites
 - Docker (Docker Desktop for Windows or Docker for Mac)
@@ -30,14 +30,16 @@ Chirper is a microblogging platform built with Laravel. It allows users to share
 - Run server ``./vendor/bin/sail up -d ``
 - Down server ``./vendor/bin/sail down ``
 - Test `` ./vendor/bin/sail test ``
+- You can create a shell alias to shorten the command. To do this, open your terminal and navigate to your home directory by running cd ~. Then, open the .bashrc file by running nano .bashrc or vim .bashrc.
+Add the following line to the end of the file:
+``alias sail='./vendor/bin/sail'``
+- Open mailpit service ``http://localhost:8025/``
+
 
 ## Features
 - User registration and login
-- User profiles and avatars
 - Posting, editing, and deleting chirps
-- Liking and commenting on chirps
-- Following and unfollowing other users
-- Viewing popular chirps based on like count
+- Notification about creating new chirp
 
 ## Dependencies
 ~~~
