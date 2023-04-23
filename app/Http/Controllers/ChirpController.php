@@ -88,8 +88,16 @@ class ChirpController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Chirp $chirp)
+    public function destroy(Chirp $chirp): Application|Redirector|\Illuminate\Contracts\Foundation\Application|RedirectResponse
     {
-        //
+        try {
+            $this->authorize('delete', $chirp);
+        } catch (AuthorizationException $e) {
+            Log::error($e->getMessage());
+            return redirect(route('chirps.index'))->withErrors(['message' => 'You are not authorized to delete this chirp.']);
+        }
+
+        $chirp->delete();
+        return redirect(route('chirps.index'));
     }
 }
