@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chirp;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -65,9 +67,22 @@ class ChirpController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Chirp $chirp)
+    public function update(Request $request, Chirp $chirp): Application|Redirector|\Illuminate\Contracts\Foundation\Application|RedirectResponse
     {
-        //
+        try {
+            $this->authorize('update', $chirp);
+        } catch (AuthorizationException $e) {
+            Log::error($e->getMessage());
+            return redirect(route('chirps.index'))->withErrors(['message' => 'You are not authorized to update this chirp.']);
+        }
+
+        $validated = $request->validate([
+            'message' => 'required|string|max:255',
+        ]);
+
+        $chirp->update($validated);
+
+        return redirect(route('chirps.index'));
     }
 
     /**
