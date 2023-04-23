@@ -3,18 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chirp;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ChirpController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): \Inertia\Response
+    public function index(): Response
     {
-        return Inertia::render('Chirps/Index', [
+        $chirps = Chirp::with('user:id,name')->latest()->paginate(5);
 
+        return Inertia::render('Chirps/Index', [
+            'chirps' => $chirps,
         ]);
     }
 
@@ -29,7 +35,7 @@ class ChirpController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): Application|Redirector|RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
         $validated = $request->validate([
             'message' => 'required|string|max:255',
